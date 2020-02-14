@@ -7,6 +7,7 @@ package sboqbuilder.data;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -18,9 +19,15 @@ import javax.swing.filechooser.FileFilter;
  *
  * @author aki
  */
-public class SboQueue { //? extends ArrayList ? v implements List??
+public class SboQueue {
 
-    public static void saveQueue(List<String> queue, JLabel infoLabel) {
+    private final List<String> queue;
+    
+    public SboQueue() {
+        this.queue = new ArrayList<>();
+    }
+
+    public void save(JLabel infoLabel) {
         if (queue.isEmpty()) {
             infoLabel.setText("The queue is empty");
             JOptionPane.showMessageDialog(null, "The queue is empty");
@@ -77,8 +84,8 @@ public class SboQueue { //? extends ArrayList ? v implements List??
         }
 
     }
-    
-    public static void listQueue(List<String> queue, JTextArea testArea, JLabel infoLabel) {
+
+    public void list(JTextArea testArea, JLabel infoLabel) {
         if (queue.isEmpty()) {
             JOptionPane.showMessageDialog(null, "The queue is empty");
             return;
@@ -92,15 +99,21 @@ public class SboQueue { //? extends ArrayList ? v implements List??
         }
 
     }
-    
-     public static void deleteQ(List<String> queue, JLabel infoLabel) {
+
+    public void delete(JLabel infoLabel) {
         if (queue.isEmpty()) {
             JOptionPane.showMessageDialog(null, "The queue is empty");
             return;
         }
 
-        queue.clear();        
+        queue.clear();
         infoLabel.setText("Queue deleted");
     }
+
+    public List<String> getQueue() {
+        return queue;
+    }
+    
+    
 
 }

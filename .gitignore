@@ -1,4 +1,6 @@
-/build/
-/dist/
-/nbprojet/private/
+nbproject/
+build/
+dist/
+nbdist/
 /teszt.sqf
+/nbproject/private/

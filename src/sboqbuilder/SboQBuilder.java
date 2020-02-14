@@ -7,6 +7,7 @@ package sboqbuilder;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import sboqbuilder.GUI.SboQBuilderFrame;
 
 
 /**

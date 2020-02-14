@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sboqbuilder;
+package sboqbuilder.GUI;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
