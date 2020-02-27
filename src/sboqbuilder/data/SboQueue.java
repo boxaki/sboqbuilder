@@ -85,6 +85,7 @@ public class SboQueue {
 
     }
 
+    // innét kiszedni, átrakni a view-ba
     public void list(JTextArea testArea, JLabel infoLabel) {
         if (queue.isEmpty()) {
             JOptionPane.showMessageDialog(null, "The queue is empty");
@@ -100,6 +101,7 @@ public class SboQueue {
 
     }
 
+    // kitörölni, és átállni a sima delete() -re
     public void delete(JLabel infoLabel) {
         if (queue.isEmpty()) {
             JOptionPane.showMessageDialog(null, "The queue is empty");
@@ -109,9 +111,18 @@ public class SboQueue {
         queue.clear();
         infoLabel.setText("Queue deleted");
     }
+    
+    public void delete() {
+        queue.clear();
+    }
+            
 
     public List<String> getQueue() {
         return queue;
+    }
+    
+    public boolean isEmpty() {
+        return this.queue.isEmpty();
     }
     
     

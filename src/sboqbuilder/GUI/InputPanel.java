@@ -5,15 +5,14 @@
  */
 package sboqbuilder.GUI;
 
-import java.awt.event.ActionListener;
-import java.beans.EventHandler;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
-import sboqbuilder.actions.Controller;
+import sboqbuilder.actions.DataController;
 
 /**
  *
@@ -26,7 +25,10 @@ public class InputPanel {
     private final JComboBox<String> searchType;
     private final JTextField inputField;
         
-    private Controller controller;
+    private DataController controller;
+    
+    private String lastSearchType;
+
 
     public InputPanel() {
         
@@ -43,8 +45,7 @@ public class InputPanel {
 
         JButton okButton = new JButton("Ok");
         
-        ActionListener listener = getActionListener();
-        okButton.addActionListener(listener);
+        okButton.addActionListener(event -> search());
 
         inputPanel.add(inputField);
         inputPanel.add(searchType);
@@ -53,28 +54,45 @@ public class InputPanel {
         Border etched = BorderFactory.createEtchedBorder();
         Border titled = BorderFactory.createTitledBorder(etched, "package name");
         inputPanel.setBorder(titled);
-
     }
 
     public JPanel getInputPanel() {
         return inputPanel;
     }
-
-    // az actionlistenerek, meg hívott fv-ek kulon class-ba, az lehetne a controller
-    private ActionListener getActionListener() {
-        return EventHandler.create(ActionListener.class, this, "search");
-    }
-
-    public void search() {  // buildTreeAndQueue        
+   
+    public void search() {  // rename buildTreeAndQueue        
 
         String type = searchType.getItemAt(searchType.getSelectedIndex());
         
-        controller.buildTreeAndQueue(inputField.getText().trim(), type);
-      
+        controller.buildTreeAndQueue(inputField.getText().trim(), type);      
     }
 
-    public void setController(Controller controller) {
+    public void setController(DataController controller) {
         this.controller = controller;
     }
+    
+    /*
+    public void buildTreeAndQueue(String packageName, String type) {
+
+        if ("none".equals(lastSearchType)) {
+            lastSearchType = type;
+
+        } else if (!lastSearchType.equals(type)) {
+            
+            if(controller.getQueue().isEmpty()) {
+                controller.deleteQ();// deleteQ-bol kiszedni az info labelt, inkább itt állítsa be
+            }
+            tree.removeTree();
+            lastSearchType = type;
+        }
+
+        if (type.equals("dep")) {  // ha elotte req volt es ki lett torolve a tree meg a q felugro ablakkal nyit
+            tree.buildDepsTree(packageName);
+        } else if (type.equals("req")) {
+            tree.buildTree(packageName);
+        }
+
+    }
+*/
     
 }

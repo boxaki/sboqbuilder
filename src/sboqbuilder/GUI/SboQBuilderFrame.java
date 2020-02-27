@@ -14,10 +14,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import sboqbuilder.actions.Controller;
+import sboqbuilder.actions.DataController;
 import sboqbuilder.test.Test;
 import sboqbuilder.data.Packages;
 import static sboqbuilder.data.Packages.findAllPackages;
+import sboqbuilder.data.SboQueue;
 
 /**
  *
@@ -28,15 +29,13 @@ public class SboQBuilderFrame extends JFrame {
     //data structures
     private Map<String, String> allPackages;
     private List<String> installedSBos;
-    // private Set<String> treeNodeElements;
-
     private SboQTree sboQTree;
     
     private Set<String> obsoletePackages;
     
     private InfoLabel label;
     
-    private static Controller controller;
+    private static DataController controller;
             
 
     public SboQBuilderFrame() {
@@ -62,11 +61,12 @@ public class SboQBuilderFrame extends JFrame {
         testArea.append("\nloaded in " + callTime + " ms");
 
         //input panel
-        // squeue = new SboQueue();
-        List<String> queue = controller.getQueue();
+        SboQueue squeue = new SboQueue();
+        
+        List<String> queue = squeue.getQueue(); // controller.getQueue();
         sboQTree = new SboQTree(installedSBos, allPackages, queue, testArea, infoLabel);
         
-        controller = new Controller(infoLabel, sboQTree, testArea);
+        controller = new DataController(infoLabel, sboQTree, testArea, squeue);
 
         InputPanel inputPanel = new InputPanel();
         inputPanel.setController(controller);
@@ -76,8 +76,6 @@ public class SboQBuilderFrame extends JFrame {
         
         JScrollPane scrollPaneTree = new JScrollPane(sboQTree.getTree());
         scrollPaneTree.setPreferredSize(dimension);
-        
-        
 
         GridBagLayout layout = new GridBagLayout();
         this.setLayout(layout);
@@ -101,5 +99,12 @@ public class SboQBuilderFrame extends JFrame {
 
         }
     }
+    
+    /*
+    private void removeTree() {
+        sboQTree.removeTree();
+        
+    }
+*/
 
 }

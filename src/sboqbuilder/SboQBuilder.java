@@ -20,15 +20,11 @@ public class SboQBuilder {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                SboQBuilderFrame frame = new SboQBuilderFrame();
-                frame.setTitle("SboQBuilder");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setVisible(true);
-
-            }
+        EventQueue.invokeLater(() -> {
+            SboQBuilderFrame frame = new SboQBuilderFrame();
+            frame.setTitle("SboQBuilder");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setVisible(true);
         });
     }
 

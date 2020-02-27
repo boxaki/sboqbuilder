@@ -7,13 +7,11 @@ package sboqbuilder.GUI;
 
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.beans.EventHandler;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import sboqbuilder.actions.Controller;
+import sboqbuilder.actions.DataController;
 
 /**
  *
@@ -22,38 +20,37 @@ import sboqbuilder.actions.Controller;
 public class IconPanel {
 
     private final JPanel iconPanel;
-    
-    public Controller controller;
 
-    public IconPanel(Controller controller) {
-    
+    public DataController controller;
+
+    public IconPanel(DataController controller) {
+
         this.controller = controller;
-        
-        ActionListener saveListener = makeActionListener("saveQueue");
-        JButton saveButton = makeButton("/Images/save24.png", saveListener, "Save queue");
 
-        ActionListener listQListener = makeActionListener("listQ");
-        JButton listQButton = makeButton("/Images/listQueue24.png", listQListener, "List queue");
+        JButton saveButton = makeButton("/Images/save24.png", "Save queue");
+        saveButton.addActionListener(event -> controller.saveQueue());
 
-        ActionListener deleteQListener = makeActionListener("deleteQ");
-        JButton deleteQButton = makeButton("/Images/deleteQueue.png", deleteQListener, "Delete queue");
+        JButton listQButton = makeButton("/Images/listQueue24.png", "List queue");
+        listQButton.addActionListener(event -> controller.listQ());
 
-        ActionListener removeTreeListener = makeActionListener("removeTree");
-        JButton removeTreeButton = makeButton("/Images/removeTree.png", removeTreeListener, "Remove tree");
+        JButton deleteQButton = makeButton("/Images/deleteQueue.png", "Delete queue");
+        deleteQButton.addActionListener(event -> controller.deleteQ());
+
+        JButton removeTreeButton = makeButton("/Images/removeTree.png", "Remove tree");
+        removeTreeButton.addActionListener(event -> controller.removeTree());
 
         iconPanel = new JPanel();
         iconPanel.add(saveButton);
         iconPanel.add(listQButton);
         iconPanel.add(deleteQButton);
-        iconPanel.add(removeTreeButton);    
-        
+        iconPanel.add(removeTreeButton);
     }
 
     public JPanel getIconPanel() {
         return iconPanel;
     }
 
-    private JButton makeButton(String iconName, ActionListener listener, String tooltip) {
+    private JButton makeButton(String iconName, String tooltip) {
         URL url = getClass().getResource(iconName);
         JButton button = new JButton(new ImageIcon(url));
         button.setMargin(new Insets(0, 0, 0, 0));
@@ -65,14 +62,9 @@ public class IconPanel {
         //button.setRolloverEnabled(true);
         Dimension ds = button.getMinimumSize();
         button.setMaximumSize(ds);
-        button.addActionListener(listener);
+
         button.setToolTipText(tooltip);
         return button;
+    }
 
-    }
-    
-    private ActionListener makeActionListener(String action) {
-        return EventHandler.create(ActionListener.class, controller, action);
-    }
-    
 }

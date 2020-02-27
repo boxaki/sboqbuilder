@@ -107,7 +107,6 @@ public class SboQTree{
         }
 
         displayTree();
-
     }
 
     private void addPackage(String packageName, DefaultMutableTreeNode startNode) {
@@ -171,7 +170,6 @@ public class SboQTree{
         for (int i = 0; i < tree.getRowCount(); i++) {
             tree.expandRow(i);
         }
-
     }
 
 }

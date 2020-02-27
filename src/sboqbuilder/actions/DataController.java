@@ -17,7 +17,7 @@ import sboqbuilder.data.SboQueue;
  *
  * @author Akos Varga <boxakos at gmail.com>
  */
-public class Controller {
+public class DataController {
 
     private final JLabel infoLabel;
     private final SboQueue queue;
@@ -27,15 +27,14 @@ public class Controller {
 
     private String lastSearchType;
 
-    public Controller(JLabel infoLabel, SboQTree tree, JTextArea testArea) {
+    public DataController(JLabel infoLabel, SboQTree tree, JTextArea testArea, SboQueue queue) {
         this.lastSearchType = "none";
 
         this.infoLabel = infoLabel;
         this.tree = tree;
         this.testArea = testArea;
-        this.queue = new SboQueue();
+        this.queue = queue; //new SboQueue();
         this.packages = new Packages(infoLabel);
-
     }
 
     public List<String> getQueue() {

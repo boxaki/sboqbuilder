@@ -5,8 +5,6 @@
  */
 package sboqbuilder.GUI;
 
-import java.awt.event.ActionListener;
-import java.beans.EventHandler;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -26,9 +24,8 @@ public class MenuBar {
         menuBar.add(fileMenu);
         JMenuItem openMenuItem = new JMenuItem("Open");
         fileMenu.add(openMenuItem);
-
-        ActionListener openListener = EventHandler.create(ActionListener.class, this, "open");
-        openMenuItem.addActionListener(openListener);
+       
+        openMenuItem.addActionListener(event -> open());
     }
     
     public JMenuBar getMenuBar() {
