@@ -34,7 +34,7 @@ public class DataController {
         this.tree = tree;
         this.testArea = testArea;
         this.queue = queue; //new SboQueue();
-        this.packages = new Packages(infoLabel);
+        this.packages = new Packages();
     }
 
     public List<String> getQueue() {

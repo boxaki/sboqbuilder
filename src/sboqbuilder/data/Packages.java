@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,18 +23,18 @@ import javax.swing.JOptionPane;
  * @author aki
  */
 public class Packages {
-    private Map<String, String> allSBos;
-    private List<String> installedSBos;
-    
-    public Packages(JLabel infoLabel) {
-        allSBos = findAllPackages(infoLabel);
-        installedSBos = new ArrayList<>();        
-    }    
 
-    public static List findInstalledSBos(Map<String, String> allPackages) {
+    private final Map<String, String> allSBos;
+    private final List<String> installedSBos;
+
+    public Packages() {
+        allSBos = findAllPackages();
+        installedSBos = findInstalledSBos(allSBos);
+    }
+
+    private static List findInstalledSBos(Map<String, String> allPackages) {
         //Set<String> installedSBos = new HashSet<>();
         List<String> installedSBos = new ArrayList<>();
-       
 
         File dir = new File("/var/log/packages");
 
@@ -62,30 +61,29 @@ public class Packages {
                     if (fromIndex > 0) {
                         fileName.delete(fromIndex, fileName.length());
                     } else {
-                        JOptionPane.showMessageDialog(null, "obsolete package found: " + file);                       
+                        JOptionPane.showMessageDialog(null, "obsolete package found: " + file);
                         break;
                     }
 
                 }
             } while (true);
         }
-      
+
         return installedSBos;
     }
 
-    public static Map<String, String> findAllPackages(JLabel infoLabel) {
+    private static Map<String, String> findAllPackages() {
         //esetleg try with resource
 
         Map<String, String> allSBos = new TreeMap<>();
         File packageInfoFile = new File("/var/lib/sbopkg/SBo/14.2/SLACKBUILDS.TXT");
         BufferedReader in = null;
-        
+
         try {
 
             in = new BufferedReader(new InputStreamReader(new FileInputStream(packageInfoFile)));
 
         } catch (FileNotFoundException exc) {
-            infoLabel.setText("SLACKBUILDS.TXT not found");
             JOptionPane.showMessageDialog(null, "SLACKBUILDS.TXT not found");
         }
 
@@ -107,9 +105,9 @@ public class Packages {
                 }
             }
             in.close();
-            infoLabel.setText("info file loaded");
+
         } catch (IOException exc) {
-            infoLabel.setText("problem with reading the file");
+
         }
 
         return allSBos;
@@ -122,5 +120,5 @@ public class Packages {
     public List<String> getInstalledSBos() {
         return installedSBos;
     }
-        
+
 }
