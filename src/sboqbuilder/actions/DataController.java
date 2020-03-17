@@ -7,9 +7,7 @@ package sboqbuilder.actions;
 
 import java.util.List;
 import java.util.Map;
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import sboqbuilder.GUI.SboQTree;
+import sboqbuilder.GUI.ViewController;
 import sboqbuilder.data.Packages;
 import sboqbuilder.data.SboQueue;
 
@@ -19,22 +17,18 @@ import sboqbuilder.data.SboQueue;
  */
 public class DataController {
 
-    private final JLabel infoLabel;
     private final SboQueue queue;
-    private final SboQTree tree; // ezt ki kéne szedni
     private final Packages packages;
-    private final JTextArea testArea;
+    private final ViewController view;
 
     private String lastSearchType;
 
-    public DataController(JLabel infoLabel, SboQTree tree, JTextArea testArea, SboQueue queue) {
+    public DataController(ViewController view) {
         this.lastSearchType = "none";
 
-        this.infoLabel = infoLabel;
-        this.tree = tree;
-        this.testArea = testArea;
-        this.queue = queue; //new SboQueue();
+        this.queue = new SboQueue();
         this.packages = new Packages();
+        this.view = view;
     }
 
     public List<String> getQueue() {
@@ -49,39 +43,74 @@ public class DataController {
         return packages.getInstalledSBos();
     }
 
+    // interface treecontroller v csak a view-ba átrakni
     public void buildTreeAndQueue(String packageName, String type) {
 
         if ("none".equals(lastSearchType)) {
             lastSearchType = type;
 
         } else if (!lastSearchType.equals(type)) {
-            queue.delete(infoLabel); // deleteQ-bol kiszedni az info labelt, inkább itt állítsa be
-            tree.removeTree();
+
+            if (!isEmptyQueue()) {
+                queue.delete();
+                view.showMessageDialog("The queue is not empty");
+            }
+
+            view.removeTree();
             lastSearchType = type;
         }
 
         if (type.equals("dep")) {  // ha elotte req volt es ki lett torolve a tree meg a q felugro ablakkal nyit
-            tree.buildDepsTree(packageName);
+            view.buildDepsTree(packageName);
         } else if (type.equals("req")) {
-            tree.buildTree(packageName);
+            view.buildTree(packageName);
         }
 
+        view.updateQueue();
+
     }
 
-    public void deleteQ() {
-        queue.delete(infoLabel);
-    }
-
-    public void listQ() {
-        queue.list(testArea, infoLabel);
+    public void deleteQueue() {
+        // esetleg megerősités
+        queue.delete();
+        view.updateQueue();
     }
 
     public void saveQueue() {
-        queue.save(infoLabel);
+        view.saveQueue(queue.getQueue());
     }
 
     public void removeTree() {
-        tree.removeTree();
+        view.removeTree();
+    }
+
+    public boolean isEmptyQueue() {
+        return queue.getQueue().isEmpty();
+    }
+
+    public void upInQueue(String selectedPackage) {
+        if (selectedPackage != null) {
+            queue.up(selectedPackage);
+            view.updateQueue();
+        }
+    }
+
+    public void downInQueue(String selectedPackage) {
+        if (selectedPackage != null) {
+            queue.down(selectedPackage);
+            view.updateQueue();
+        }
+    }
+
+    public void removeFromQueue(String selectedPackage) {
+        if (selectedPackage != null) {
+            queue.remove(selectedPackage);
+            view.updateQueue();
+        }
+    }
+
+    public void quit() {
+        System.exit(0);
     }
 
 }
