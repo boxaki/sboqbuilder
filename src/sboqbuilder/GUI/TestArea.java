@@ -18,6 +18,7 @@ public class TestArea {
 
     public TestArea() {
         testArea = new JTextArea(30, 40);
+        testArea.setEditable(false);
         JScrollPane scrollPaneText = new JScrollPane(testArea);        
     }
 

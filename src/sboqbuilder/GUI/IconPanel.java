@@ -29,12 +29,11 @@ public class IconPanel {
 
         JButton saveButton = makeButton("/Images/save24.png", "Save queue");
         saveButton.addActionListener(event -> controller.saveQueue());
-
+        // kitörölni -> keresés után összeomlik a view
         JButton listQButton = makeButton("/Images/listQueue24.png", "List queue");
-        listQButton.addActionListener(event -> controller.listQ());
-
+                        
         JButton deleteQButton = makeButton("/Images/deleteQueue.png", "Delete queue");
-        deleteQButton.addActionListener(event -> controller.deleteQ());
+        deleteQButton.addActionListener(event -> controller.deleteQueue());
 
         JButton removeTreeButton = makeButton("/Images/removeTree.png", "Remove tree");
         removeTreeButton.addActionListener(event -> controller.removeTree());
