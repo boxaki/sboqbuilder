@@ -5,12 +5,18 @@
  */
 package sboqbuilder.GUI;
 
-import java.util.List;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 import sboqbuilder.actions.DataController;
 
@@ -24,14 +30,13 @@ public class InputPanel {
 
     private final JComboBox<String> searchType;
     private final JTextField inputField;
-        
+
     private DataController controller;
-    
+
     private String lastSearchType;
 
-
     public InputPanel() {
-        
+
         inputField = new JTextField(20);
         inputField.setText("calibre");
 
@@ -43,13 +48,17 @@ public class InputPanel {
         //tooltipet adni az itemekhez
         //searchType.setToolTipText("REQ: list requirement packages DEP: list dependent packages");
 
-        JButton okButton = new JButton("Ok");
-        
-        okButton.addActionListener(event -> search());
+        Action searchAction = new SearchAction("Ok");
 
         inputPanel.add(inputField);
         inputPanel.add(searchType);
-        inputPanel.add(okButton);
+        inputPanel.add(new JButton(searchAction));
+
+        InputMap imap = inputPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        imap.put(KeyStroke.getKeyStroke("ENTER"), "panel.search");
+
+        ActionMap amap = inputPanel.getActionMap();
+        amap.put("panel.search", searchAction);
 
         Border etched = BorderFactory.createEtchedBorder();
         Border titled = BorderFactory.createTitledBorder(etched, "package name");
@@ -59,40 +68,28 @@ public class InputPanel {
     public JPanel getInputPanel() {
         return inputPanel;
     }
-   
+
     public void search() {  // rename buildTreeAndQueue        
 
         String type = searchType.getItemAt(searchType.getSelectedIndex());
-        
-        controller.buildTreeAndQueue(inputField.getText().trim(), type);      
+
+        controller.buildTreeAndQueue(inputField.getText().trim(), type);
     }
 
     public void setController(DataController controller) {
         this.controller = controller;
     }
-    
-    /*
-    public void buildTreeAndQueue(String packageName, String type) {
 
-        if ("none".equals(lastSearchType)) {
-            lastSearchType = type;
+    public class SearchAction extends AbstractAction {
 
-        } else if (!lastSearchType.equals(type)) {
-            
-            if(controller.getQueue().isEmpty()) {
-                controller.deleteQ();// deleteQ-bol kiszedni az info labelt, inkább itt állítsa be
-            }
-            tree.removeTree();
-            lastSearchType = type;
+        public SearchAction(String name) {
+            putValue(Action.NAME, name);
         }
 
-        if (type.equals("dep")) {  // ha elotte req volt es ki lett torolve a tree meg a q felugro ablakkal nyit
-            tree.buildDepsTree(packageName);
-        } else if (type.equals("req")) {
-            tree.buildTree(packageName);
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            InputPanel.this.search();
         }
-
     }
-*/
-    
+
 }
