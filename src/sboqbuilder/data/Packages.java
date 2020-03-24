@@ -12,10 +12,14 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,6 +28,7 @@ import javax.swing.JOptionPane;
  */
 public class Packages {
 
+    private final static String BASE_DIR_PATH = "/var/lib/sbopkg/SBo/14.2";
     private final Map<String, String> allSBos;
     private final List<String> installedSBos;
 
@@ -111,6 +116,70 @@ public class Packages {
         }
 
         return allSBos;
+    }
+
+    public List<String> getFile(String packageName, SboFile sboFile) {
+
+        String[] categoryDirs = getCategoryDirs();
+        String categoryPath = findCategoryDir(packageName, categoryDirs);
+
+        String packagePath = categoryPath + "/" + packageName + "/";
+        switch (sboFile) {
+            case README:
+            case slackdesc:
+                packagePath += sboFile.getName();
+                break;
+            case SlackBuild:
+            case info:
+                packagePath += packageName + "." + sboFile.getName();
+                break;
+        }
+
+        File file = new File(packagePath);
+        if (file.isFile()) {
+            try {
+                List<String> fileAsList = Files.readAllLines(Paths.get(packagePath));
+                return fileAsList;
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Packages.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Packages.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return null;
+    }
+
+    private String[] getCategoryDirs() {
+        File baseDir = new File(BASE_DIR_PATH);
+
+        return baseDir.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return new File(dir, name).isDirectory();
+            }
+        });
+    }
+
+    private String findCategoryDir(String packageName, String[] categoryDirs) {
+        for (String subDir : categoryDirs) {
+            String categoryPath = BASE_DIR_PATH + "/" + subDir;
+            File categoryDir = new File(categoryPath);
+
+            String[] packageDir = categoryDir.list(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.equals(packageName) && new File(dir, name).isDirectory();
+                }
+            });
+
+            if (packageDir.length > 0) {
+                return categoryPath;
+            }
+        }
+
+        return null;
     }
 
     public Map<String, String> getAllSBos() {

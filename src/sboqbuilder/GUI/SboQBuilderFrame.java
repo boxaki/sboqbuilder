@@ -105,12 +105,16 @@ public class SboQBuilderFrame extends JFrame implements ViewController {
         SaveFileChooser.save(queue);
     }
 
-    /*
-    private void listAllPackages() {
-        for (Map.Entry<String, String> entry : allPackages.entrySet()) {
-            System.out.println(entry.getKey() + "[ " + entry.getValue() + "]");
-
+    @Override
+    public void showReadme(List<String> readme) {
+        Reader readmeArea = new Reader();
+        
+        for(String line : readme) {
+            readmeArea.append(line + "\n");
         }
+        
+        JFrame textFrame = readmeArea.getReaderFrame();        
+        textFrame.pack();        
+        textFrame.setVisible(true);
     }
-     */
 }

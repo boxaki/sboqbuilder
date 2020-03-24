@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import sboqbuilder.GUI.ViewController;
 import sboqbuilder.data.Packages;
+import sboqbuilder.data.SboFile;
 import sboqbuilder.data.SboQueue;
 
 /**
@@ -89,21 +90,21 @@ public class DataController {
     }
 
     public void upInQueue(String selectedPackage) {
-        if (selectedPackage != null) {
+        if (!selectedPackage.isEmpty()) {
             queue.up(selectedPackage);
             view.updateQueue();
         }
     }
 
     public void downInQueue(String selectedPackage) {
-        if (selectedPackage != null) {
+        if (!selectedPackage.isEmpty()) {
             queue.down(selectedPackage);
             view.updateQueue();
         }
     }
 
     public void removeFromQueue(String selectedPackage) {
-        if (selectedPackage != null) {
+        if (!selectedPackage.isEmpty()) {
             queue.remove(selectedPackage);
             view.updateQueue();
         }
@@ -111,6 +112,15 @@ public class DataController {
 
     public void quit() {
         System.exit(0);
+    }
+
+    public void showFile(String packageName, SboFile file) {
+        List<String> readme = packages.getFile(packageName, file);
+        
+        if (readme != null) {
+            view.showReadme(readme);
+        }
+
     }
 
 }
